@@ -16,6 +16,39 @@ La perspectiva AWS es inicial, no un diseño de producción. Considera API Gatew
 - [Supuestos y decisiones](docs/actividad-1/decisiones-y-supuestos.md)
 - [Riesgos](docs/actividad-1/riesgos.md)
 - [Guion de sustentación](docs/actividad-1/guion-sustentacion.md)
+- [Estructura Onion del MVP](docs/arquitectura-onion.md)
+
+## Ejecutar el MVP
+
+Requiere Node.js 20.9 o posterior.
+
+```bash
+npm install
+npm run dev
+```
+
+Abre `http://localhost:3000`. En local se usa `.data/orders.json`, creado con pedidos de demostración al primer inicio; no hace falta una cuenta AWS ni base de datos para probar el tablero.
+
+La interfaz permite buscar/filtrar pedidos, crear pedidos, abrir su ficha, consultar la cronología y actualizar estados con validación de transiciones. API: `GET/POST /api/orders`, `GET/PATCH /api/orders/:id` y `GET /api/health`.
+
+### Persistencia para Vercel
+
+Vercel no comparte un disco local persistente entre ejecuciones serverless. Conecta una base [Neon](https://vercel.com/docs/marketplace-storage) desde el Marketplace y asigna su `DATABASE_URL` al proyecto para Preview y Production. El adaptador de persistencia usa el protocolo serverless de Neon; otros proveedores PostgreSQL requieren un adaptador distinto. Luego inicializa una vez la tabla con `npm run db:schema` usando la variable localmente. El esquema está en `db/schema.sql`. La app no cae silenciosamente a datos en memoria en Vercel: si falta `DATABASE_URL`, la API responde como no disponible. El disco JSON local solo es para desarrollo.
+
+Importa el repositorio en Vercel desde GitHub; detectará Next.js y leerá [`vercel.json`](vercel.json). El preset Framework es Next.js, el build predeterminado es `next build` y el comando local es `npm run dev`. La configuración de Next.js se detecta automáticamente; el archivo solo fija el preset. No requiere rewrites manuales.
+
+Al terminar, comprueba `/api/health`; informa `local-json` en local y `postgresql` con la variable configurada. La guía oficial describe [Next.js en Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs) y su [configuración `vercel.json`](https://vercel.com/docs/project-configuration/vercel-json).
+
+### Configuración incluida
+
+- `vercel.json`: preset Next.js.
+- `.env.example`: variable necesaria para PostgreSQL en Vercel.
+- `db/schema.sql`: tabla de pedidos e índice.
+- `src/core`: dominio y casos de uso.
+- `src/infrastructure`: persistencia y composición.
+- `src/app`: frontend y adaptadores HTTP.
+
+Los documentos AWS describen una propuesta conceptual. El MVP desplegable usa Neon/PostgreSQL porque Vercel ofrece conexiones a bases de datos mediante integraciones del Marketplace; no conecta AWS MSK, DynamoDB ni otros servicios externos automáticamente. Este prototipo no incluye autenticación; usa datos ficticios y no debe recibir información personal ni quedar expuesto como sistema operativo real. Ver [arquitectura Onion del MVP](docs/arquitectura-onion.md).
 
 ## Límites
 
