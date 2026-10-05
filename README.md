@@ -20,9 +20,10 @@ El alcance de esta actividad es diagnóstico y contexto arquitectónico. No se s
 
 Este repositorio contiene los materiales fuente. Para completar la entrega académica, agrega los nombres del equipo y curso, publica el repositorio en una cuenta GitHub y pega aquí el enlace público o compartido. Graba y publica la sustentación en YouTube, Google Drive o Microsoft Teams y reemplaza el pendiente por su enlace; no adjuntes el archivo de video.
 
-- Repositorio GitHub: **pendiente de publicación**
+- Repositorio GitHub: https://github.com/santy8151/ultima-milla-diagnostico-contexto (privado)
 - Video de sustentación: **pendiente de grabación y publicación**
 
 ## Base del caso
 
 Actividad 1: Diagnóstico y contexto arquitectónico, enunciado suministrado por el estudiante. El caso obligatorio define una solución logística de última milla para retail digital y enumera sus actores, riesgos y decisión inicial. Las propuestas adicionales de este README y los documentos son análisis y supuestos explícitos para completar el diagnóstico.
+
