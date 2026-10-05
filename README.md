@@ -2,28 +2,30 @@
 
 ## Resumen ejecutivo
 
-La empresa de retail digital recibe pedidos desde varios canales, gestiona inventarios distribuidos y coordina almacenes, rutas y repartidores sin una vista única y confiable del estado de cada pedido. La fragmentación provoca duplicación de información, retrasos, errores operativos y baja trazabilidad, con impacto en la experiencia del cliente y el costo de operación.
+**Ruta Clara** es una propuesta de plataforma centralizada para un retail digital que recibe pedidos por varios canales, maneja inventario distribuido y coordina entregas sin una vista confiable del estado de cada pedido. Esto genera duplicados, discrepancias, retrasos, errores y baja trazabilidad.
 
-Se propone analizar una plataforma centralizada que consolide el ciclo logístico: registrar y consultar pedidos, validar disponibilidad, preparar y asignar entregas, seguir su estado y gestionar incidencias. Sus usuarios principales son operadores de tienda/comercio, personal de almacén, repartidores, soporte y administradores; el cliente consulta el estado y recibe avisos. La plataforma intercambia información con pagos, geolocalización, notificaciones y ERP/CRM internos.
+La propuesta conecta clientes, operadores, almacén, repartidores y soporte con pagos, geolocalización, notificaciones y ERP/CRM. El alcance inicial cubre registro y consulta de pedidos, coordinación del inventario, seguimiento de preparación y entrega, y gestión de incidencias.
 
-El alcance de esta actividad es diagnóstico y contexto arquitectónico. No se seleccionan tecnologías ni se especifica la arquitectura interna. La solución debe reducir discrepancias y mejorar la trazabilidad sin asumir que reemplaza los sistemas comerciales existentes.
+La perspectiva AWS es inicial, no un diseño de producción. Considera API Gateway y Lambda para entrada/procesamiento; S3 para objetos y contenido web estático; DynamoDB como candidato a persistencia operacional estructurada; CloudFront para distribuir una interfaz web; VPC y Security Groups para recursos privados; IAM para permisos mínimos; CloudWatch como base de monitoreo. Amazon MSK y Managed Prometheus quedan condicionados a necesidades confirmadas para evitar complejidad prematura.
 
 ## Entregables
 
-- [Análisis del problema, usuarios y alcance](docs/actividad-1/analisis.md)
-- [Diagrama de contexto](docs/actividad-1/diagrama-contexto.md)
-- [Supuestos, decisiones y preguntas abiertas](docs/actividad-1/decisiones-y-supuestos.md)
-- [Registro de riesgos](docs/actividad-1/riesgos.md)
-- [Guion sugerido para video de 5 a 8 minutos](docs/actividad-1/guion-sustentacion.md)
+- [Análisis del problema](docs/actividad-1/analisis.md)
+- [Diagrama de contexto C4 nivel 1](docs/actividad-1/diagrama-contexto.md)
+- [Propuesta AWS, flujo, seguridad, observabilidad y diagramas](docs/actividad-1/arquitectura-aws.md)
+- [Supuestos y decisiones](docs/actividad-1/decisiones-y-supuestos.md)
+- [Riesgos](docs/actividad-1/riesgos.md)
+- [Guion de sustentación](docs/actividad-1/guion-sustentacion.md)
 
-## Límites y pendientes
+## Límites
 
-Este repositorio contiene los materiales fuente. Para completar la entrega académica, agrega los nombres del equipo y curso, publica el repositorio en una cuenta GitHub y pega aquí el enlace público o compartido. Graba y publica la sustentación en YouTube, Google Drive o Microsoft Teams y reemplaza el pendiente por su enlace; no adjuntes el archivo de video.
+Esta actividad no fija la arquitectura definitiva, una base de datos final, contratos de integración, región, RTO/RPO, costos, CI/CD ni implementación. Antes de seleccionar servicios finales se deben validar volúmenes, fuentes maestras, requisitos de seguridad/privacidad, capacidades de integración y operación.
 
-- Repositorio GitHub: https://github.com/santy8151/ultima-milla-diagnostico-contexto (privado)
-- Video de sustentación: **pendiente de grabación y publicación**
+## Repositorio y video
+
+- Repositorio GitHub (privado): https://github.com/santy8151/ultima-milla-diagnostico-contexto
+- Video de sustentación: **pendiente de grabación/publicación**. Agrega aquí el enlace de YouTube, Google Drive o Microsoft Teams.
 
 ## Base del caso
 
-Actividad 1: Diagnóstico y contexto arquitectónico, enunciado suministrado por el estudiante. El caso obligatorio define una solución logística de última milla para retail digital y enumera sus actores, riesgos y decisión inicial. Las propuestas adicionales de este README y los documentos son análisis y supuestos explícitos para completar el diagnóstico.
-
+Actividad 1: Diagnóstico y contexto arquitectónico, enunciado proporcionado por el estudiante. El caso obligatorio define la solución logística de última milla para retail digital y aporta actores, riesgos y decisión inicial. Las alternativas AWS son propuestas para análisis y validación.

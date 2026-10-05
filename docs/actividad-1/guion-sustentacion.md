@@ -1,48 +1,40 @@
-# Guion de sustentación (5 a 8 minutos)
+# Guion de sustentación (6-7 minutos)
 
-Duración sugerida: 6 minutos. Completa los campos entre corchetes antes de grabar. Comparte pantalla con el diagrama durante el segmento 3.
+Completa [nombres] y [curso]. El contenido desarrolla una propuesta inicial, no un diseño de producción.
 
-## 0:00–0:40 | Presentación
+## 0:00-0:40 | Presentación
 
-Hola, somos [nombres] de [curso/grupo]. Presentamos el diagnóstico y contexto arquitectónico de una plataforma de gestión logística de última milla para una empresa de retail digital. En esta actividad buscamos comprender el problema antes de escoger tecnologías.
+Hola, somos [nombres] de [curso]. Presentamos el diagnóstico de una plataforma de gestión logística de última milla para retail digital. Primero entendemos el problema y luego justificamos opciones de arquitectura.
 
-## 0:40–1:35 | Problema
+## 0:40-1:35 | Problema
 
-La empresa recibe pedidos por varios canales, trabaja con inventario distribuido y coordina almacenes, rutas y repartidores. Hoy no dispone de una vista centralizada del estado real de cada pedido. La información se duplica o queda desactualizada, lo que produce retrasos, errores operativos y poca trazabilidad.
+La empresa recibe pedidos por varios canales, maneja inventario distribuido y coordina almacenes, rutas y repartidores sin una vista confiable del estado de cada pedido. Esto produce duplicados, discrepancias, retrasos, errores y poca trazabilidad. Afecta la experiencia del cliente y obliga a operación y soporte a reconstruir información manualmente.
 
-Esto afecta al cliente, que no sabe con claridad qué pasa con su pedido, y también al equipo interno, que debe reconstruir información entre sistemas y personas. Las consecuencias posibles incluyen comprometer inventario inexistente, repetir trabajo, fallar entregas y elevar el costo de soporte.
+## 1:35-2:20 | Actores
 
-## 1:35–2:35 | Usuarios y actores
+Los usuarios son clientes, operadores de tienda, administradores de almacén, repartidores y soporte. La plataforma también intercambia información con pagos, geolocalización, notificaciones y ERP/CRM. Aún hay que validar quién es dueño del pedido y del inventario.
 
-Los actores humanos principales son el cliente, el operador de comercio o tienda, el administrador de almacén, el repartidor y soporte al cliente. Proponemos también un administrador de plataforma para gestionar usuarios y parámetros. Cada actor necesita información y permisos distintos: por ejemplo, almacén confirma preparación, repartidores actualizan intentos y soporte consulta la cronología.
+## 2:20-3:20 | Diagrama de contexto
 
-En el entorno se encuentran el sistema de pagos, el servicio de geolocalización, el sistema de notificaciones y el ERP o CRM interno. Los consideramos externos porque conservan responsabilidades propias y su integración debe confirmarse.
+[Muestra el diagrama de contexto.] Ruta Clara centraliza la vista y coordinación del ciclo del pedido. Recorre los intercambios de cada usuario y después los sistemas externos. Las flechas no significan que la integración ya exista ni fijan protocolos. El límite del sistema mantiene a pagos y ERP/CRM como sistemas con responsabilidades propias.
 
-## 2:35–4:00 | Diagrama de contexto
+## 3:20-4:45 | Arquitectura AWS inicial
 
-[Mostrar el diagrama.]
+[Muestra el diagrama AWS.] CloudFront y S3 pueden servir una interfaz web estática. API Gateway recibe solicitudes HTTPS y Lambda ejecuta validaciones y lógica acotada. Para el estado operativo hace falta almacenamiento estructurado; proponemos DynamoDB como candidato sujeto a validar. S3 se reserva para evidencias y archivos, no para guardar transacciones de pedidos.
 
-El sistema bajo análisis es la plataforma centralizada. Recibe pedidos y consultas, y ofrece seguimiento al cliente. Intercambia pedidos, existencias, preparación y despacho con operación y almacén; entrega asignaciones al repartidor y recibe ubicación, estados e intentos. Soporte consulta la cronología y registra incidencias.
+Los eventos pueden desacoplar asignación, seguimiento y notificaciones. MSK/Kafka se considera si volumen, múltiples consumidores, retención y capacidad del equipo lo justifican. Para empezar, podría bastar una alternativa administrada más simple.
 
-Con sistemas externos, el flujo es conceptual: pagos aporta estados de autorización, geolocalización información de posición o rutas, notificaciones transporta avisos y ERP/CRM comparte los datos empresariales que se acuerden. El diagrama no fija protocolos ni tecnología. Una pregunta clave que queda abierta es qué sistema será la fuente maestra de pedidos e inventario.
+## 4:45-5:40 | Red, seguridad y monitoreo
 
-## 4:00–5:00 | Alcance
+Los recursos que necesitan conectividad privada, como un posible clúster MSK, irían en subnets privadas de una VPC. Los servicios administrados no se instalan todos dentro de la VPC. Security Groups restringen conexiones y cada componente usa un rol IAM con permisos mínimos. CloudWatch es la base para logs y métricas; AMP se añade solo si necesitamos métricas Prometheus de aplicación.
 
-La propuesta inicial cubre el seguimiento logístico desde la recepción hasta la entrega o cierre de incidencia, la validación de inventario, la coordinación de preparación, la asignación operativa y el registro de eventos. También considera una vista para soporte y estado para el cliente.
+## 5:40-6:40 | Riesgos y cierre
 
-En esta actividad dejamos fuera la selección tecnológica, el diseño interno, la optimización avanzada de rutas y el reemplazo del ERP o CRM. Delimitamos así el análisis al problema y sus fronteras.
-
-## 5:00–5:45 | Riesgos y decisiones
-
-Los riesgos más importantes son la inconsistencia de inventario, los pedidos duplicados, las entregas fallidas, la pérdida de trazabilidad, la coordinación deficiente y el acceso indebido a datos personales o de ubicación. Como decisión inicial proponemos una plataforma centralizada que registre el ciclo logístico y sus incidencias. No escogemos tecnologías porque todavía necesitamos conocer volúmenes, sistemas existentes, conectividad y requisitos de disponibilidad.
-
-## 5:45–6:15 | Cierre
-
-El siguiente paso es validar los supuestos con las áreas de operación, almacén, soporte y tecnología. Con una línea base podremos definir objetivos medibles y luego evaluar alternativas de arquitectura. Gracias.
+Los principales riesgos son inventario inconsistente, pedidos duplicados, pérdida o repetición de eventos, fallas de proveedores, retrasos y exposición de datos. Antes del diseño definitivo debemos conocer volúmenes, fuentes maestras, conectividad, objetivos de servicio, requisitos de privacidad y presupuesto. Gracias.
 
 ## Antes de publicar
 
-- Reemplazar los campos entre corchetes.
-- Mostrar el diagrama con texto legible.
-- Confirmar que no se expongan datos personales reales en la grabación.
-- Publicar en YouTube, Google Drive o Microsoft Teams y pegar el enlace en el README.
+- Completar nombres/curso y confirmar que las afirmaciones representan el trabajo del equipo.
+- Mostrar los diagramas legibles.
+- No mostrar datos personales reales en pantalla.
+- Publicar el video en YouTube, Google Drive o Microsoft Teams y agregar el enlace al README.

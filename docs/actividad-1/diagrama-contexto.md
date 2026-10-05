@@ -1,47 +1,38 @@
 # Diagrama de contexto
 
-El rectángulo principal representa la plataforma bajo análisis. Las flechas indican intercambios de información a nivel de contexto; no definen protocolos ni APIs.
+Diagrama C4 de contexto (nivel 1). El sistema bajo análisis es Ruta Clara, una propuesta de plataforma centralizada de gestión logística. Las flechas representan intercambios conceptuales, no protocolos ni integraciones confirmadas.
 
 ```mermaid
 flowchart LR
-  Cliente[Cliente]
-  Operador[Operador de comercio o tienda]
-  Almacen[Administrador de almacén]
-  Repartidor[Repartidor]
-  Soporte[Soporte al cliente]
-  Admin[Administrador de plataforma]
+  Cliente[Persona: Cliente]
+  Operador[Persona: Operador de comercio o tienda]
+  Almacen[Persona: Administrador de almacén]
+  Repartidor[Persona: Repartidor]
+  Soporte[Persona: Soporte al cliente]
+  Admin[Persona propuesta: Administrador de plataforma]
+  Sistema[Software system: Ruta Clara\nGestión logística de última milla]
+  Pagos[Software externo: Sistema de pagos]
+  Geo[Software externo: Geolocalización]
+  Notif[Software externo: Notificaciones]
+  ERP[Software externo: ERP o CRM interno]
 
-  subgraph Sistema[Plataforma centralizada de gestión logística de última milla]
-    Gestion[Pedidos · inventario · asignación · seguimiento · incidencias]
-  end
-
-  Pagos[Sistema de pagos]
-  Geo[Servicio de geolocalización]
-  Notif[Sistema de notificaciones]
-  ERP[ERP o CRM interno]
-
-  Cliente -->|Pedido y consulta de estado| Gestion
-  Gestion -->|Estado y avisos| Cliente
-  Operador -->|Pedidos y excepciones| Gestion
-  Gestion -->|Estado y alertas operativas| Operador
-  Almacen -->|Existencias, preparación y despacho| Gestion
-  Gestion -->|Pedidos por preparar| Almacen
-  Repartidor -->|Ubicación, estados e intentos| Gestion
-  Gestion -->|Entregas asignadas e instrucciones| Repartidor
-  Soporte -->|Consulta y registro de incidencia| Gestion
-  Gestion -->|Cronología y resultado| Soporte
-  Admin -->|Usuarios, permisos y parámetros| Gestion
-  Gestion -->|Métricas y alertas| Admin
-  Gestion <-->|Estado/autorización de pago| Pagos
-  Gestion <-->|Posición, mapas y estimaciones| Geo
-  Gestion -->|Solicitudes de envío| Notif
-  Notif -->|Resultado de envío| Gestion
-  Gestion <-->|Pedidos, inventario y datos acordados| ERP
+  Cliente -->|Pedido / consulta| Sistema
+  Sistema -->|Estado / avisos| Cliente
+  Operador -->|Pedidos / excepciones| Sistema
+  Sistema -->|Estado operativo| Operador
+  Almacen -->|Existencias / preparación / despacho| Sistema
+  Sistema -->|Pedidos por preparar| Almacen
+  Repartidor -->|Estado / intento / ubicación autorizada| Sistema
+  Sistema -->|Asignaciones / instrucciones| Repartidor
+  Soporte -->|Consulta / incidencia| Sistema
+  Sistema -->|Cronología| Soporte
+  Admin -->|Usuarios / parámetros| Sistema
+  Sistema -->|Alertas operativas| Admin
+  Sistema <-->|Autorización / estado| Pagos
+  Sistema <-->|Rutas / estimaciones| Geo
+  Sistema -->|Solicitudes de envío| Notif
+  Notif -->|Resultado de envío| Sistema
+  Sistema <-->|Datos empresariales acordados| ERP
 ```
 
-## Lectura del diagrama
-
-- Los participantes humanos usan la plataforma para registrar, ejecutar o consultar el flujo.
-- Las flechas bidireccionales representan intercambio en ambos sentidos; las flechas simples muestran el flujo principal propuesto.
-- Pagos, geolocalización, notificaciones y ERP/CRM son externos y su disponibilidad/contrato no se da por garantizado.
-- Aún debe acordarse qué sistema es fuente maestra para pedido, inventario y datos de cliente.
+Las integraciones se deben validar con la empresa. Para la propuesta técnica y el diagrama AWS, consulta [arquitectura-aws.md](arquitectura-aws.md).
